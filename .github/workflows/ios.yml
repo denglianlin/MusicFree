@@ -30,6 +30,12 @@ jobs:
           ruby-version: '3.3'
 
       - name: Install CocoaPods dependencies
+        # 关键：关掉 New Architecture，走老桥（legacy bridge）。
+        # react-native-track-player v4 不支持 TurboModule，
+        # 新架构下启动时 ObjCInteropTurboModule 构造即空指针闪退。
+        # Expo SDK 52 / RN 0.76.5 仍支持老桥（SDK 55 / RN 0.82 起才强制新架构）。
+        env:
+          RCT_NEW_ARCH_ENABLED: '0'
         run: |
           cd ios
           bundle install
